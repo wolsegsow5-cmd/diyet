@@ -3,297 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Diyet & Sağlık Asistanı</title>
+    <title>AI PRO Diyet & Sağlık | Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
     <style>
+        /* Hareketli Arka Plan Animasyonu */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f9f4;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 20px;
+            /* Yemek konseptine uygun enerjik hareketli arkaplan */
+            background: linear-gradient(-45deg, #f4b41a, #ff7e5f, #feb47b, #43e97b, #38f9d7);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
         }
+
         .container {
-            max-width: 900px;
+            max-width: 850px;
             margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            /* Cam Efekti (Glassmorphism) */
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
         }
-        h1, h2, h3 { color: #2e7d32; }
+
+        h1 {
+            text-align: center;
+            font-weight: 800;
+            color: #ff5722;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 2.2em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        h2 { color: #2e7d32; font-weight: 800; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
         .section {
+            background: rgba(255, 255, 255, 0.7);
             margin-bottom: 25px;
-            padding: 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            background-color: #fafafa;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input[type="number"], input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-weight: bold;
+
+        label { font-weight: 600; margin-top: 15px; display: block; color: #444; }
+        
+        input[type="number"], input[type="file"], input[type="text"] {
+            width: 100%; padding: 12px; margin-top: 8px;
+            border: 2px solid #ddd; border-radius: 8px;
+            font-family: 'Poppins', sans-serif; font-size: 15px;
             transition: 0.3s;
         }
-        button:hover { background-color: #45a049; }
-        button:disabled { background-color: #9e9e9e; cursor: not-allowed; }
         
-        #loading {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-            font-size: 18px;
-            color: #ff9800;
-            font-weight: bold;
+        input:focus { border-color: #ff7e5f; outline: none; box-shadow: 0 0 8px rgba(255,126,95,0.3); }
+
+        .btn-main {
+            width: 100%;
+            background: linear-gradient(45deg, #ff512f, #dd2476);
+            color: white; border: none; padding: 18px; font-size: 18px;
+            border-radius: 10px; cursor: pointer; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(221, 36, 118, 0.4);
+            transition: all 0.3s ease;
         }
-        #results {
-            display: none;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #e8f5e9;
-            border-left: 5px solid #2e7d32;
-            border-radius: 5px;
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(221, 36, 118, 0.6); }
+
+        /* Uyarı ve Animasyonlar */
+        .alert-box {
+            background: #ffebee; color: #c62828; padding: 15px;
+            border-left: 5px solid #c62828; border-radius: 5px;
+            margin: 15px 0; font-weight: 600; display: none;
+            animation: float 2s ease-in-out infinite;
         }
-        .food-analysis {
-            background: #fff3e0;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 15px;
-            border-left: 5px solid #ff9800;
+
+        /* Ödeme Modülü */
+        .premium-box {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white; padding: 25px; border-radius: 15px;
+            margin-top: 30px; text-align: center; display: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
+        .premium-box h3 { color: #ffd700; margin-top: 0; font-size: 24px; }
+        .price-tag { font-size: 30px; font-weight: 800; margin: 15px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .credit-card-form { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; text-align: left; }
+        .credit-card-form label { color: #ddd; }
+        .btn-pay {
+            background: #ffd700; color: #000; padding: 15px; width: 100%;
+            font-weight: 800; border: none; border-radius: 8px; margin-top: 15px;
+            font-size: 18px; cursor: pointer;
+        }
+        .btn-pay:hover { background: #ffea00; }
+
         .days-container {
-            max-height: 500px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            background: #fff;
+            max-height: 400px; overflow-y: auto; background: #fff;
+            padding: 15px; border-radius: 10px; border: 1px solid #ddd;
+            filter: blur(5px); pointer-events: none; transition: 0.5s;
         }
-        .day-card {
-            border-bottom: 1px solid #eee;
-            padding: 15px 0;
-        }
-        .day-card:last-child { border-bottom: none; }
-        .day-title {
-            background: #2e7d32;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        ul { margin: 5px 0; line-height: 1.6; }
+        .days-container.unlocked { filter: blur(0); pointer-events: auto; }
+        
+        .day-card { border-bottom: 2px dashed #eee; padding: 15px 0; }
+        .day-title { background: #ff5722; color: white; padding: 5px 12px; border-radius: 5px; font-weight: 600; display: inline-block; }
+
+        .floating-emoji { font-size: 40px; position: absolute; top: -15px; right: -15px; animation: float 3s infinite; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Yapay Zeka Destekli Diyet Asistanı 🤖🍏</h1>
-    <p>Hedeflerinizi ve sağlık verilerinizi girin, sistem size gramajlarıyla tam 30 günlük özel bir program hazırlasın.</p>
+    <div class="floating-emoji">🥗🔥</div>
+    <h1>AI PRO Diyet & Sağlık</h1>
+    <p class="subtitle">Yapay Zeka Destekli Kişisel Beslenme Asistanı</p>
 
     <div class="section">
-        <h2>1. Besin Tanıma (AI Vision Simülasyonu)</h2>
-        <label for="foodPhoto">Yediğiniz bir şeyin fotoğrafını yükleyin (Opsiyonel):</label>
+        <h2>📷 1. Akıllı Besin Tanıma</h2>
+        <label>Öğününüzün fotoğrafını yükleyin (Yapay Zeka kalorisini bulsun):</label>
         <input type="file" id="foodPhoto" accept="image/*">
-        <div id="mockAnalysis" class="food-analysis" style="display:none;">
-            <strong>📷 Görüntü İşleme Sonucu:</strong><br>
-            Algılanan: Izgara Tavuk Göğsü ve Brokoli <br>
-            Tahmini: 280 kcal | Karbonhidrat: 8g | Protein: 45g | Yağ: 5g
+    </div>
+
+    <div class="section">
+        <h2>🧍 2. Fiziksel Hedefleriniz</h2>
+        <div style="display: flex; gap: 15px;">
+            <div style="flex:1;">
+                <label>Boy (cm):</label><input type="number" id="height" placeholder="175">
+            </div>
+            <div style="flex:1;">
+                <label>Mevcut Kilo (kg):</label><input type="number" id="weight" placeholder="70">
+            </div>
+        </div>
+        <label>Hedef Kilo (kg):</label>
+        <input type="number" id="targetWeight" placeholder="Hayalinizdeki kiloyu yazın...">
+        
+        <div id="healthAlert" class="alert-box"></div>
+    </div>
+
+    <div class="section">
+        <h2>🩸 3. Sağlık & Kan Değerleri (Opsiyonel)</h2>
+        <div style="display: flex; gap: 10px;">
+            <div style="flex:1;"><label>Tansiyon:</label><input type="number" id="bp" placeholder="Örn: 12"></div>
+            <div style="flex:1;"><label>Kan Şekeri:</label><input type="number" id="sugar" placeholder="Örn: 90"></div>
+            <div style="flex:1;"><label>D Vitamini:</label><input type="number" id="vitD" placeholder="Örn: 30"></div>
         </div>
     </div>
 
-    <div class="section">
-        <h2>2. Fiziksel Özellikleriniz ve Hedefiniz</h2>
-        <label>Boy (cm):</label>
-        <input type="number" id="height" placeholder="Örn: 175" required>
+    <button class="btn-main" onclick="startAIAnalysis()">Programımı Oluştur & Analiz Et</button>
+
+    <div id="premiumSection" class="premium-box">
+        <h3>🌟 AI PRO Premium'a Geçiş Yap</h3>
+        <p>Sağlıklı ve garantili 30 günlük diyet listeniz hazırlandı!</p>
+        <div class="price-tag">İLK 30 GÜN ÜCRETSİZ!</div>
+        <p style="font-size: 14px; margin-bottom: 20px;">*30 gün sonunda aylık sadece 1.000 TL.</p>
         
-        <label>Mevcut Kilo (kg):</label>
-        <input type="number" id="weight" placeholder="Örn: 70" required>
-        
-        <label>Hedef Kilo (kg):</label>
-        <input type="number" id="targetWeight" placeholder="Örn: 65 (Vermek için) veya 80 (Almak için)" required>
+        <div class="credit-card-form">
+            <label>Kart Üzerindeki İsim</label>
+            <input type="text" placeholder="Ad Soyad">
+            <label>Kart Numarası</label>
+            <input type="text" placeholder="**** **** **** ****" maxlength="16">
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1;"><label>SKT (Ay/Yıl)</label><input type="text" placeholder="12/26"></div>
+                <div style="flex:1;"><label>CVV</label><input type="password" placeholder="***" maxlength="3"></div>
+            </div>
+            <button class="btn-pay" onclick="unlockDietPlan()">💳 Ücretsiz Denemeyi Başlat & Kilidi Aç</button>
+        </div>
     </div>
 
-    <div class="section">
-        <h2>3. Kan & Tansiyon Değerleriniz (Biliyorsanız)</h2>
-        <label>Büyük Tansiyon (Sistolik - Normali: 12):</label>
-        <input type="number" id="bp" placeholder="Örn: 12">
+    <div id="results" style="display:none; margin-top: 30px;">
+        <h2>📊 Size Özel Rapor</h2>
+        <p id="analysisSummary" style="font-weight: 600; color: #1565c0;"></p>
         
-        <label>Açlık Kan Şekeri (Normali: 70-100 arası):</label>
-        <input type="number" id="sugar" placeholder="Örn: 90">
-        
-        <label>D Vitamini (Normali: 20-50 ng/mL):</label>
-        <input type="number" id="vitD" placeholder="Örn: 30">
-    </div>
-
-    <button id="calcBtn" onclick="startAIAnalysis()">30 Günlük AI Diyetimi Oluştur</button>
-
-    <div id="loading">
-        ⏳ Yapay Zeka verilerinizi analiz ediyor, kalorileri ve gramajları hesaplıyor... Lütfen bekleyin.
-    </div>
-
-    <div id="results">
-        <h2>📊 AI Analiz Raporu</h2>
-        <h3 id="bmiResult"></h3>
-        <h3 id="goalResult" style="color:#0277bd;"></h3>
-        <p id="healthWarnings" style="color: #d32f2f; font-weight: bold;"></p>
-        
-        <h3>📅 30 Günlük Kişisel Programınız (Gramajlı)</h3>
+        <h3>🔒 30 Günlük Diyet Menünüz (KİLİTLİ)</h3>
+        <p style="color: #666; font-size:14px;">Tam listeyi görmek için lütfen ücretsiz denemenizi başlatın.</p>
         <div class="days-container" id="dietPlan"></div>
     </div>
 </div>
 
 <script>
-    // Fotoğraf yükleme simülasyonu
-    document.getElementById('foodPhoto').addEventListener('change', function() {
-        if(this.files && this.files[0]) {
-            document.getElementById('mockAnalysis').style.display = 'block';
-        }
-    });
-
     function startAIAnalysis() {
         const height = parseFloat(document.getElementById('height').value);
-        const weight = parseFloat(document.getElementById('weight').value);
-        const targetWeight = parseFloat(document.getElementById('targetWeight').value);
+        let weight = parseFloat(document.getElementById('weight').value);
+        let targetWeight = parseFloat(document.getElementById('targetWeight').value);
 
         if (!height || !weight || !targetWeight) {
-            alert("Lütfen boy, mevcut kilo ve hedef kilonuzu eksiksiz girin!");
+            alert("Lütfen boy, kilo ve hedef kilonuzu eksiksiz girin!");
             return;
         }
 
-        // Butonu kilitle ve yükleniyor animasyonu göster
-        document.getElementById('calcBtn').disabled = true;
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('results').style.display = 'none';
+        const alertBox = document.getElementById('healthAlert');
+        alertBox.style.display = 'none'; // Uyarıyı sıfırla
 
-        // Yapay zeka düşünme süresini simüle et (2 saniye)
-        setTimeout(() => {
-            generateDietPlan(height, weight, targetWeight);
-            
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('calcBtn').disabled = false;
-            document.getElementById('results').style.display = 'block';
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-        }, 2000);
-    }
+        // *** SAĞLIK FİLTRESİ (1 Ayda Max 4 kg mantığı) ***
+        const maxChange = 4; // Aylık maksimum sağlıklı değişim kilosu
+        let weightDiff = targetWeight - weight;
 
-    function generateDietPlan(height, weight, targetWeight) {
-        const bp = parseFloat(document.getElementById('bp').value);
-        const sugar = parseFloat(document.getElementById('sugar').value);
-        const vitD = parseFloat(document.getElementById('vitD').value);
+        // Kilo Alma Uyarısı
+        if (weightDiff > maxChange) {
+            alertBox.innerHTML = `⚠️ DİKKAT: 30 günde ${weightDiff} kg almak insan fizyolojisine aykırıdır! Karaciğer yağlanması ve diyabet riskine karşı sistem hedefi sağlıklı sınır olan <strong>+${maxChange} kg</strong> olarak güncelledi.`;
+            alertBox.style.display = 'block';
+            targetWeight = weight + maxChange;
+            document.getElementById('targetWeight').value = targetWeight;
+        } 
+        // Kilo Verme Uyarısı
+        else if (weightDiff < -maxChange) {
+            let kayip = Math.abs(weightDiff);
+            alertBox.innerHTML = `⚠️ DİKKAT: 30 günde ${kayip} kg vermek kalp kaslarına zarar verir ve kas kaybına yol açar! Sistem, sağlığınızı korumak için hedefinizi sağlıklı sınır olan <strong>-${maxChange} kg</strong> olarak güncelledi.`;
+            alertBox.style.display = 'block';
+            targetWeight = weight - maxChange;
+            document.getElementById('targetWeight').value = targetWeight;
+        }
 
-        // VKİ Hesaplama
+        // VKİ ve Analiz
         const heightInMeters = height / 100;
         const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
         
-        // Hedef Belirleme ve Gramaj Ayarları
-        let goal = "";
-        let meatGrams, carbGrams, oatGrams, eggCount;
+        let summary = `Mevcut Vücut Kitle Endeksiniz: ${bmi}. Yapay zeka, ${weight} kilodan ${targetWeight} kiloya güvenli geçiş için metabolizma hızınıza uygun bir liste oluşturdu.`;
+        document.getElementById('analysisSummary').innerText = summary;
 
-        if (targetWeight < weight) {
-            goal = "Kilo Verme (Kalori Açığı)";
-            meatGrams = 120;  // Az porsiyon et
-            carbGrams = 40;   // Düşük karbonhidrat
-            oatGrams = 30;
-            eggCount = 2;
-        } else if (targetWeight > weight) {
-            goal = "Kilo Alma (Kalori Fazlası)";
-            meatGrams = 200;  // Yüksek porsiyon et
-            carbGrams = 150;  // Yüksek karbonhidrat
-            oatGrams = 80;
-            eggCount = 4;
-        } else {
-            goal = "Kilo Koruma (Dengeli)";
-            meatGrams = 150;
-            carbGrams = 80;
-            oatGrams = 50;
-            eggCount = 3;
-        }
+        // Diyet Listesini Oluştur (Bulanık halde arkada duracak)
+        generateDietPlan(targetWeight, weight);
 
-        document.getElementById('bmiResult').innerText = `Mevcut Vücut Kitle Endeksiniz (VKİ): ${bmi}`;
-        document.getElementById('goalResult').innerText = `Hedefiniz: ${targetWeight} kg (${goal})`;
+        // Ekranları Göster
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('premiumSection').style.display = 'block';
+        
+        // Ödeme kısmına kaydır
+        document.getElementById('premiumSection').scrollIntoView({ behavior: 'smooth' });
+    }
 
-        // Sağlık Durumları Kontrolü
-        let warnings = "";
-        let isDiabetic = (sugar && sugar > 110);
-        let isHypertensive = (bp && bp >= 14);
-        let carbType = isDiabetic ? "Karabuğday/Kinoa" : "Bulgur/Tam Buğday";
-        let saltStatus = isHypertensive ? "Tuzsuz" : "Az Tuzlu";
-
-        if (isDiabetic) warnings += "⚠️ Kan şekeri yüksek: Basit karbonhidratlar (pirinç, beyaz ekmek) çıkarıldı, glisemik indeksi düşük besinler eklendi.<br>";
-        if (isHypertensive) warnings += "⚠️ Tansiyon yüksek: Menünüz tamamen tuzsuz ve sodyumu düşük hale getirildi.<br>";
-        if (vitD && vitD < 20) warnings += "⚠️ D Vitamini düşük: Öğünlerinize ekstra somon balığı, yumurta sarısı ve mantar eklendi.<br>";
-
-        document.getElementById('healthWarnings').innerHTML = warnings;
-
-        // Menü Varyasyonları (Sıkılmamak için 4 farklı şablon)
-        const menus = [
-            {
-                kahvalti: `${eggCount} adet haşlanmış yumurta, ${saltStatus} 50gr lor peyniri, 5 adet zeytin, domates, salatalık.`,
-                ara: `1 avuç (${targetWeight > weight ? '50gr' : '20gr'}) çiğ badem ve yeşil çay.`,
-                ogle: `${meatGrams}gr Izgara tavuk göğsü, ${carbGrams}gr haşlanmış ${carbType}, bol yeşillik salatası.`,
-                aksam: `Zeytinyağlı sebze yemeği (kabak/spanak), 1 kase (150gr) ev yoğurdu.`
-            },
-            {
-                kahvalti: `${oatGrams}gr yulaf ezmesi, 1 bardak süt, 1 tatlı kaşığı doğal fıstık ezmesi, yarım muz.`,
-                ara: `1 adet yeşil elma, üzerine tarçın serpilmiş.`,
-                ogle: `1 kase mercimek veya ezogelin çorbası, ${meatGrams}gr fırın köfte, mevsim salata.`,
-                aksam: `${meatGrams}gr ızgara veya fırın Balık (Somon/Levrek), fırınlanmış kuşkonmaz veya brokoli.`
-            },
-            {
-                kahvalti: `${saltStatus} peynirli ve bol yeşillikli omlet (${eggCount} yumurta ile), 2 dilim ${carbType} ekmeği.`,
-                ara: `${targetWeight > weight ? '2 bardak kefir ve 3 tam ceviz' : '1 fincan sade kahve ve 1 tam ceviz'}.`,
-                ogle: `${carbGrams + 50}gr etli kuru fasulye veya nohut, 1 kase cacık.`,
-                aksam: `${meatGrams}gr ızgara hindi göğüs, közlenmiş biber ve patlıcan salatası.`
-            },
-            {
-                kahvalti: `1 kase ev yoğurdu içine ${oatGrams}gr yulaf, 1 yemek kaşığı chia tohumu ve yaban mersini.`,
-                ara: `1 kupa rezene veya papatya çayı, 2 adet kuru kayısı.`,
-                ogle: `Büyük boy ton balıklı salata (${meatGrams}gr süzülmüş ton balığı), içine mısır KULLANILMAYACAK.`,
-                aksam: `Fırında zeytinyağlı karnabahar, ${meatGrams}gr sote dana eti.`
-            }
-        ];
-
-        // 30 Günlük Listeyi Oluştur
+    function generateDietPlan(targetWeight, currentWeight) {
         let dietHtml = "";
+        let goalType = targetWeight > currentWeight ? "Kilo Alma" : "Kilo Verme";
+        
         for (let day = 1; day <= 30; day++) {
-            // Modulus kullanarak menüleri günlere sırayla dağıtıyoruz (Günde farklı bir menü)
-            let menuIndex = day % menus.length; 
-            let dailyMenu = menus[menuIndex];
-
             dietHtml += `
                 <div class="day-card">
                     <div class="day-title">Gün ${day}</div>
-                    <ul>
-                        <li><strong>Kahvaltı:</strong> ${dailyMenu.kahvalti}</li>
-                        <li><strong>Ara Öğün:</strong> ${dailyMenu.ara}</li>
-                        <li><strong>Öğle:</strong> ${dailyMenu.ogle}</li>
-                        <li><strong>Akşam:</strong> ${dailyMenu.aksam}</li>
+                    <ul style="line-height: 1.8; color: #444;">
+                        <li><strong>Kahvaltı:</strong> ${goalType === 'Kilo Alma' ? '4 yumurtalı kaşarlı omlet, 100gr yulaf, fıstık ezmesi' : '2 haşlanmış yumurta, lor peyniri, yeşillik'}</li>
+                        <li><strong>Ara Öğün:</strong> ${goalType === 'Kilo Alma' ? 'Muz ve 1 avuç ceviz' : 'Yeşil çay ve 10 çiğ badem'}</li>
+                        <li><strong>Öğle:</strong> ${goalType === 'Kilo Alma' ? '200gr tavuk, 150gr pirinç pilavı' : '150gr ızgara tavuk, bol yeşil salata'}</li>
+                        <li><strong>Akşam:</strong> ${goalType === 'Kilo Alma' ? 'Zeytinyağlı sebze, tam buğday makarna' : 'Fırın balık ve buharda brokoli'}</li>
                     </ul>
                 </div>
             `;
         }
-
         document.getElementById('dietPlan').innerHTML = dietHtml;
+    }
+
+    // Ödeme Yapılınca Listeyi Açan Fonksiyon
+    function unlockDietPlan() {
+        alert("🎉 Tebrikler! 30 Günlük Ücretsiz AI PRO denemeniz başladı. (Kartınızdan şu an ücret çekilmedi). Liste kilidi açılıyor...");
+        
+        document.getElementById('premiumSection').style.display = 'none';
+        
+        const planContainer = document.getElementById('dietPlan');
+        planContainer.classList.add('unlocked'); // Bulanıklığı kaldırır
+        planContainer.scrollIntoView({ behavior: 'smooth' });
     }
 </script>
 
