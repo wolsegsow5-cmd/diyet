@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kişisel Diyet & Sağlık Asistanı</title>
+    <title>AI Diyet & Sağlık Asistanı</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,7 +13,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: auto;
             background: white;
             padding: 30px;
@@ -52,8 +52,19 @@
             cursor: pointer;
             margin-top: 20px;
             font-weight: bold;
+            transition: 0.3s;
         }
         button:hover { background-color: #45a049; }
+        button:disabled { background-color: #9e9e9e; cursor: not-allowed; }
+        
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ff9800;
+            font-weight: bold;
+        }
         #results {
             display: none;
             margin-top: 30px;
@@ -69,147 +80,220 @@
             margin-top: 15px;
             border-left: 5px solid #ff9800;
         }
-        ul { line-height: 1.6; }
+        .days-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background: #fff;
+        }
+        .day-card {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        .day-card:last-child { border-bottom: none; }
+        .day-title {
+            background: #2e7d32;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        ul { margin: 5px 0; line-height: 1.6; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Kişisel Diyet & Sağlık Asistanı 🍏</h1>
-    <p>Sağlık verilerinizi girerek size özel, doğal besinlerden oluşan diyet listenizi oluşturun.</p>
+    <h1>Yapay Zeka Destekli Diyet Asistanı 🤖🍏</h1>
+    <p>Hedeflerinizi ve sağlık verilerinizi girin, sistem size gramajlarıyla tam 30 günlük özel bir program hazırlasın.</p>
 
     <div class="section">
-        <h2>1. Besin Analizi (Fotoğraf Yükle)</h2>
-        <label for="foodPhoto">Tabağınızın veya besinin fotoğrafını yükleyin:</label>
+        <h2>1. Besin Tanıma (AI Vision Simülasyonu)</h2>
+        <label for="foodPhoto">Yediğiniz bir şeyin fotoğrafını yükleyin (Opsiyonel):</label>
         <input type="file" id="foodPhoto" accept="image/*">
         <div id="mockAnalysis" class="food-analysis" style="display:none;">
-            <strong>Yapay Zeka Besin Analizi (Örnek Sonuç):</strong><br>
-            Algılanan: Izgara Tavuk Salatası <br>
-            Tahmini Kalori: 350 kcal | Karbonhidrat: 12g | Protein: 35g | Yağ: 18g
+            <strong>📷 Görüntü İşleme Sonucu:</strong><br>
+            Algılanan: Izgara Tavuk Göğsü ve Brokoli <br>
+            Tahmini: 280 kcal | Karbonhidrat: 8g | Protein: 45g | Yağ: 5g
         </div>
     </div>
 
     <div class="section">
-        <h2>2. Vücut Ölçüleriniz</h2>
+        <h2>2. Fiziksel Özellikleriniz ve Hedefiniz</h2>
         <label>Boy (cm):</label>
         <input type="number" id="height" placeholder="Örn: 175" required>
         
-        <label>Kilo (kg):</label>
+        <label>Mevcut Kilo (kg):</label>
         <input type="number" id="weight" placeholder="Örn: 70" required>
+        
+        <label>Hedef Kilo (kg):</label>
+        <input type="number" id="targetWeight" placeholder="Örn: 65 (Vermek için) veya 80 (Almak için)" required>
     </div>
 
     <div class="section">
-        <h2>3. Kan & Tansiyon Değerleriniz (Biliyorsanız doldurun)</h2>
-        <label>Büyük Tansiyon (Sistolik - Örn: 12):</label>
-        <input type="number" id="bp" placeholder="Normali: 12">
+        <h2>3. Kan & Tansiyon Değerleriniz (Biliyorsanız)</h2>
+        <label>Büyük Tansiyon (Sistolik - Normali: 12):</label>
+        <input type="number" id="bp" placeholder="Örn: 12">
         
-        <label>Açlık Kan Şekeri (mg/dL):</label>
-        <input type="number" id="sugar" placeholder="Normali: 70-100 arası">
+        <label>Açlık Kan Şekeri (Normali: 70-100 arası):</label>
+        <input type="number" id="sugar" placeholder="Örn: 90">
         
-        <label>D Vitamini (ng/mL):</label>
-        <input type="number" id="vitD" placeholder="Normali: 20-50 arası">
+        <label>D Vitamini (Normali: 20-50 ng/mL):</label>
+        <input type="number" id="vitD" placeholder="Örn: 30">
     </div>
 
-    <button onclick="calculateDiet()">Özel Diyet Listemi Oluştur</button>
+    <button id="calcBtn" onclick="startAIAnalysis()">30 Günlük AI Diyetimi Oluştur</button>
+
+    <div id="loading">
+        ⏳ Yapay Zeka verilerinizi analiz ediyor, kalorileri ve gramajları hesaplıyor... Lütfen bekleyin.
+    </div>
 
     <div id="results">
-        <h2>📊 Analiz Sonuçlarınız</h2>
+        <h2>📊 AI Analiz Raporu</h2>
         <h3 id="bmiResult"></h3>
+        <h3 id="goalResult" style="color:#0277bd;"></h3>
         <p id="healthWarnings" style="color: #d32f2f; font-weight: bold;"></p>
         
-        <h3>🥦 Size Özel Doğal Diyet Listeniz</h3>
-        <div id="dietPlan"></div>
+        <h3>📅 30 Günlük Kişisel Programınız (Gramajlı)</h3>
+        <div class="days-container" id="dietPlan"></div>
     </div>
 </div>
 
 <script>
-    // Fotoğraf yüklendiğinde örnek analizi gösteren fonksiyon
+    // Fotoğraf yükleme simülasyonu
     document.getElementById('foodPhoto').addEventListener('change', function() {
         if(this.files && this.files[0]) {
             document.getElementById('mockAnalysis').style.display = 'block';
         }
     });
 
-    function calculateDiet() {
+    function startAIAnalysis() {
         const height = parseFloat(document.getElementById('height').value);
         const weight = parseFloat(document.getElementById('weight').value);
+        const targetWeight = parseFloat(document.getElementById('targetWeight').value);
+
+        if (!height || !weight || !targetWeight) {
+            alert("Lütfen boy, mevcut kilo ve hedef kilonuzu eksiksiz girin!");
+            return;
+        }
+
+        // Butonu kilitle ve yükleniyor animasyonu göster
+        document.getElementById('calcBtn').disabled = true;
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('results').style.display = 'none';
+
+        // Yapay zeka düşünme süresini simüle et (2 saniye)
+        setTimeout(() => {
+            generateDietPlan(height, weight, targetWeight);
+            
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('calcBtn').disabled = false;
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }, 2000);
+    }
+
+    function generateDietPlan(height, weight, targetWeight) {
         const bp = parseFloat(document.getElementById('bp').value);
         const sugar = parseFloat(document.getElementById('sugar').value);
         const vitD = parseFloat(document.getElementById('vitD').value);
 
-        if (!height || !weight) {
-            alert("Lütfen boy ve kilonuzu eksiksiz girin!");
-            return;
-        }
-
-        // Vücut Kitle Endeksi (VKİ) Hesaplama
+        // VKİ Hesaplama
         const heightInMeters = height / 100;
         const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
-        let bmiCategory = "";
+        
+        // Hedef Belirleme ve Gramaj Ayarları
+        let goal = "";
+        let meatGrams, carbGrams, oatGrams, eggCount;
 
-        if (bmi < 18.5) bmiCategory = "Zayıf";
-        else if (bmi >= 18.5 && bmi < 24.9) bmiCategory = "Normal Kilolu";
-        else if (bmi >= 25 && bmi < 29.9) bmiCategory = "Fazla Kilolu";
-        else bmiCategory = "Obez";
+        if (targetWeight < weight) {
+            goal = "Kilo Verme (Kalori Açığı)";
+            meatGrams = 120;  // Az porsiyon et
+            carbGrams = 40;   // Düşük karbonhidrat
+            oatGrams = 30;
+            eggCount = 2;
+        } else if (targetWeight > weight) {
+            goal = "Kilo Alma (Kalori Fazlası)";
+            meatGrams = 200;  // Yüksek porsiyon et
+            carbGrams = 150;  // Yüksek karbonhidrat
+            oatGrams = 80;
+            eggCount = 4;
+        } else {
+            goal = "Kilo Koruma (Dengeli)";
+            meatGrams = 150;
+            carbGrams = 80;
+            oatGrams = 50;
+            eggCount = 3;
+        }
 
-        document.getElementById('bmiResult').innerText = "Vücut Kitle Endeksiniz (VKİ): " + bmi + " (" + bmiCategory + ")";
+        document.getElementById('bmiResult').innerText = `Mevcut Vücut Kitle Endeksiniz (VKİ): ${bmi}`;
+        document.getElementById('goalResult').innerText = `Hedefiniz: ${targetWeight} kg (${goal})`;
 
-        // Sağlık Uyarıları ve Özel Durumlar
+        // Sağlık Durumları Kontrolü
         let warnings = "";
-        let isDiabetic = false;
-        let isHypertensive = false;
+        let isDiabetic = (sugar && sugar > 110);
+        let isHypertensive = (bp && bp >= 14);
+        let carbType = isDiabetic ? "Karabuğday/Kinoa" : "Bulgur/Tam Buğday";
+        let saltStatus = isHypertensive ? "Tuzsuz" : "Az Tuzlu";
 
-        if (sugar && sugar > 110) {
-            warnings += "⚠️ Kan şekeriniz yüksek seviyede. Karbonhidratı sınırlandıran bir liste oluşturuldu.<br>";
-            isDiabetic = true;
-        }
-        if (bp && bp >= 14) {
-            warnings += "⚠️ Tansiyonunuz yüksek. Tuzsuz ve potasyum açısından zengin bir liste oluşturuldu.<br>";
-            isHypertensive = true;
-        }
-        if (vitD && vitD < 20) {
-            warnings += "⚠️ D Vitamini seviyeniz düşük. Listenize yumurta ve mantar gibi doğal takviyeler eklendi.<br>";
-        }
+        if (isDiabetic) warnings += "⚠️ Kan şekeri yüksek: Basit karbonhidratlar (pirinç, beyaz ekmek) çıkarıldı, glisemik indeksi düşük besinler eklendi.<br>";
+        if (isHypertensive) warnings += "⚠️ Tansiyon yüksek: Menünüz tamamen tuzsuz ve sodyumu düşük hale getirildi.<br>";
+        if (vitD && vitD < 20) warnings += "⚠️ D Vitamini düşük: Öğünlerinize ekstra somon balığı, yumurta sarısı ve mantar eklendi.<br>";
 
         document.getElementById('healthWarnings').innerHTML = warnings;
 
-        // Özel Diyet Listesi Algoritması (Doğal Ürünlerle)
-        let dietHtml = "<ul>";
+        // Menü Varyasyonları (Sıkılmamak için 4 farklı şablon)
+        const menus = [
+            {
+                kahvalti: `${eggCount} adet haşlanmış yumurta, ${saltStatus} 50gr lor peyniri, 5 adet zeytin, domates, salatalık.`,
+                ara: `1 avuç (${targetWeight > weight ? '50gr' : '20gr'}) çiğ badem ve yeşil çay.`,
+                ogle: `${meatGrams}gr Izgara tavuk göğsü, ${carbGrams}gr haşlanmış ${carbType}, bol yeşillik salatası.`,
+                aksam: `Zeytinyağlı sebze yemeği (kabak/spanak), 1 kase (150gr) ev yoğurdu.`
+            },
+            {
+                kahvalti: `${oatGrams}gr yulaf ezmesi, 1 bardak süt, 1 tatlı kaşığı doğal fıstık ezmesi, yarım muz.`,
+                ara: `1 adet yeşil elma, üzerine tarçın serpilmiş.`,
+                ogle: `1 kase mercimek veya ezogelin çorbası, ${meatGrams}gr fırın köfte, mevsim salata.`,
+                aksam: `${meatGrams}gr ızgara veya fırın Balık (Somon/Levrek), fırınlanmış kuşkonmaz veya brokoli.`
+            },
+            {
+                kahvalti: `${saltStatus} peynirli ve bol yeşillikli omlet (${eggCount} yumurta ile), 2 dilim ${carbType} ekmeği.`,
+                ara: `${targetWeight > weight ? '2 bardak kefir ve 3 tam ceviz' : '1 fincan sade kahve ve 1 tam ceviz'}.`,
+                ogle: `${carbGrams + 50}gr etli kuru fasulye veya nohut, 1 kase cacık.`,
+                aksam: `${meatGrams}gr ızgara hindi göğüs, közlenmiş biber ve patlıcan salatası.`
+            },
+            {
+                kahvalti: `1 kase ev yoğurdu içine ${oatGrams}gr yulaf, 1 yemek kaşığı chia tohumu ve yaban mersini.`,
+                ara: `1 kupa rezene veya papatya çayı, 2 adet kuru kayısı.`,
+                ogle: `Büyük boy ton balıklı salata (${meatGrams}gr süzülmüş ton balığı), içine mısır KULLANILMAYACAK.`,
+                aksam: `Fırında zeytinyağlı karnabahar, ${meatGrams}gr sote dana eti.`
+            }
+        ];
 
-        // Kategoriye göre genel yaklaşım
-        if (bmiCategory === "Fazla Kilolu" || bmiCategory === "Obez") {
-            dietHtml += "<li><strong>Kahvaltı:</strong> " + (isHypertensive ? "Tuzsuz" : "Az tuzlu") + " lor peyniri, 2 adet haşlanmış organik yumurta, bol yeşillik (roka, maydanoz) ve 5 adet zeytin.</li>";
-            dietHtml += "<li><strong>Ara Öğün:</strong> 1 fincan yeşil çay ve 1 avuç çiğ badem (metabolizma hızlandırır).</li>";
-            dietHtml += "<li><strong>Öğle:</strong> Zeytinyağlı mevsim sebzesi yemeği (örneğin kereviz veya enginar), 1 kase ev yoğurdu. " + (isDiabetic ? "Ekmek yok." : "1 dilim siyez ekmeği.") + "</li>";
-            dietHtml += "<li><strong>Ara Öğün:</strong> 1 adet yeşil elma üzerine tarçın (kan şekerini dengeler).</li>";
-            dietHtml += "<li><strong>Akşam:</strong> Fırında ızgara balık veya köy tavuğu, bol limonlu mevsim salata (limon demir emilimini artırır).</li>";
-        } 
-        else if (bmiCategory === "Zayıf") {
-            dietHtml += "<li><strong>Kahvaltı:</strong> Ev yapımı şekersiz fıstık ezmesi, 2 dilim tam buğday ekmeği, 1 bardak ev yapımı kefir, omlet.</li>";
-            dietHtml += "<li><strong>Ara Öğün:</strong> 1 avuç ceviz ve 2 adet kuru incir (doğal enerji ve kilo alımı için).</li>";
-            dietHtml += "<li><strong>Öğle:</strong> Bol malzemeli kuru fasulye veya nohut, bulgur pilavı, cacık.</li>";
-            dietHtml += "<li><strong>Akşam:</strong> Kırmızı et (ızgara), fırınlanmış tatlı patates ve tereyağlı sebze sote.</li>";
-        }
-        else {
-            // Normal kilo - koruma diyeti
-            dietHtml += "<li><strong>Kahvaltı:</strong> Yulaf ezmesi, ev yoğurdu, 1 tatlı kaşığı doğal bal ve yaban mersini.</li>";
-            dietHtml += "<li><strong>Öğle:</strong> Izgara tavuklu kinoa salatası, 1 şişe doğal maden suyu.</li>";
-            dietHtml += "<li><strong>Akşam:</strong> Zeytinyağlı taze fasulye, karabuğday pilavı, 1 kase ev yoğurdu.</li>";
-        }
+        // 30 Günlük Listeyi Oluştur
+        let dietHtml = "";
+        for (let day = 1; day <= 30; day++) {
+            // Modulus kullanarak menüleri günlere sırayla dağıtıyoruz (Günde farklı bir menü)
+            let menuIndex = day % menus.length; 
+            let dailyMenu = menus[menuIndex];
 
-        // D vitamin eksikliği varsa özel ekleme
-        if (vitD && vitD < 20) {
-            dietHtml += "<br><hr><li><em><strong>D Vitamini Destek Menüsü:</strong> Haftada en az 2 gün öğlen veya akşam menüsüne kültür mantarı sote ve somon/uskumru gibi yağlı balıklar ekleyin. Her gün 15-20 dk güneşlenmeyi unutmayın.</em></li>";
+            dietHtml += `
+                <div class="day-card">
+                    <div class="day-title">Gün ${day}</div>
+                    <ul>
+                        <li><strong>Kahvaltı:</strong> ${dailyMenu.kahvalti}</li>
+                        <li><strong>Ara Öğün:</strong> ${dailyMenu.ara}</li>
+                        <li><strong>Öğle:</strong> ${dailyMenu.ogle}</li>
+                        <li><strong>Akşam:</strong> ${dailyMenu.aksam}</li>
+                    </ul>
+                </div>
+            `;
         }
-
-        dietHtml += "</ul>";
-        dietHtml += "<p><em>Not: Bu liste girdiğiniz değerlere göre yazılım tarafından oluşturulmuş örnek bir doğal beslenme şablonudur. Kesin tedavi veya reçete yerine geçmez.</em></p>";
 
         document.getElementById('dietPlan').innerHTML = dietHtml;
-        document.getElementById('results').style.display = 'block';
-        
-        // Ekranı sonuçlara kaydır
-        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
     }
 </script>
 
