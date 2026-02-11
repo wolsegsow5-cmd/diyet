@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kişisel Diyet & Sağlık Asistanı</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f9f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 { color: #2e7d32; }
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background-color: #fafafa;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="number"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        button:hover { background-color: #45a049; }
+        #results {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-left: 5px solid #2e7d32;
+            border-radius: 5px;
+        }
+        .food-analysis {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border-left: 5px solid #ff9800;
+        }
+        ul { line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Kişisel Diyet & Sağlık Asistanı 🍏</h1>
+    <p>Sağlık verilerinizi girerek size özel, doğal besinlerden oluşan diyet listenizi oluşturun.</p>
+
+    <div class="section">
+        <h2>1. Besin Analizi (Fotoğraf Yükle)</h2>
+        <label for="foodPhoto">Tabağınızın veya besinin fotoğrafını yükleyin:</label>
+        <input type="file" id="foodPhoto" accept="image/*">
+        <div id="mockAnalysis" class="food-analysis" style="display:none;">
+            <strong>Yapay Zeka Besin Analizi (Örnek Sonuç):</strong><br>
+            Algılanan: Izgara Tavuk Salatası <br>
+            Tahmini Kalori: 350 kcal | Karbonhidrat: 12g | Protein: 35g | Yağ: 18g
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. Vücut Ölçüleriniz</h2>
+        <label>Boy (cm):</label>
+        <input type="number" id="height" placeholder="Örn: 175" required>
+        
+        <label>Kilo (kg):</label>
+        <input type="number" id="weight" placeholder="Örn: 70" required>
+    </div>
+
+    <div class="section">
+        <h2>3. Kan & Tansiyon Değerleriniz (Biliyorsanız doldurun)</h2>
+        <label>Büyük Tansiyon (Sistolik - Örn: 12):</label>
+        <input type="number" id="bp" placeholder="Normali: 12">
+        
+        <label>Açlık Kan Şekeri (mg/dL):</label>
+        <input type="number" id="sugar" placeholder="Normali: 70-100 arası">
+        
+        <label>D Vitamini (ng/mL):</label>
+        <input type="number" id="vitD" placeholder="Normali: 20-50 arası">
+    </div>
+
+    <button onclick="calculateDiet()">Özel Diyet Listemi Oluştur</button>
+
+    <div id="results">
+        <h2>📊 Analiz Sonuçlarınız</h2>
+        <h3 id="bmiResult"></h3>
+        <p id="healthWarnings" style="color: #d32f2f; font-weight: bold;"></p>
+        
+        <h3>🥦 Size Özel Doğal Diyet Listeniz</h3>
+        <div id="dietPlan"></div>
+    </div>
+</div>
+
+<script>
+    // Fotoğraf yüklendiğinde örnek analizi gösteren fonksiyon
+    document.getElementById('foodPhoto').addEventListener('change', function() {
+        if(this.files && this.files[0]) {
+            document.getElementById('mockAnalysis').style.display = 'block';
+        }
+    });
+
+    function calculateDiet() {
+        const height = parseFloat(document.getElementById('height').value);
+        const weight = parseFloat(document.getElementById('weight').value);
+        const bp = parseFloat(document.getElementById('bp').value);
+        const sugar = parseFloat(document.getElementById('sugar').value);
+        const vitD = parseFloat(document.getElementById('vitD').value);
+
+        if (!height || !weight) {
+            alert("Lütfen boy ve kilonuzu eksiksiz girin!");
+            return;
+        }
+
+        // Vücut Kitle Endeksi (VKİ) Hesaplama
+        const heightInMeters = height / 100;
+        const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+        let bmiCategory = "";
+
+        if (bmi < 18.5) bmiCategory = "Zayıf";
+        else if (bmi >= 18.5 && bmi < 24.9) bmiCategory = "Normal Kilolu";
+        else if (bmi >= 25 && bmi < 29.9) bmiCategory = "Fazla Kilolu";
+        else bmiCategory = "Obez";
+
+        document.getElementById('bmiResult').innerText = "Vücut Kitle Endeksiniz (VKİ): " + bmi + " (" + bmiCategory + ")";
+
+        // Sağlık Uyarıları ve Özel Durumlar
+        let warnings = "";
+        let isDiabetic = false;
+        let isHypertensive = false;
+
+        if (sugar && sugar > 110) {
+            warnings += "⚠️ Kan şekeriniz yüksek seviyede. Karbonhidratı sınırlandıran bir liste oluşturuldu.<br>";
+            isDiabetic = true;
+        }
+        if (bp && bp >= 14) {
+            warnings += "⚠️ Tansiyonunuz yüksek. Tuzsuz ve potasyum açısından zengin bir liste oluşturuldu.<br>";
+            isHypertensive = true;
+        }
+        if (vitD && vitD < 20) {
+            warnings += "⚠️ D Vitamini seviyeniz düşük. Listenize yumurta ve mantar gibi doğal takviyeler eklendi.<br>";
+        }
+
+        document.getElementById('healthWarnings').innerHTML = warnings;
+
+        // Özel Diyet Listesi Algoritması (Doğal Ürünlerle)
+        let dietHtml = "<ul>";
+
+        // Kategoriye göre genel yaklaşım
+        if (bmiCategory === "Fazla Kilolu" || bmiCategory === "Obez") {
+            dietHtml += "<li><strong>Kahvaltı:</strong> " + (isHypertensive ? "Tuzsuz" : "Az tuzlu") + " lor peyniri, 2 adet haşlanmış organik yumurta, bol yeşillik (roka, maydanoz) ve 5 adet zeytin.</li>";
+            dietHtml += "<li><strong>Ara Öğün:</strong> 1 fincan yeşil çay ve 1 avuç çiğ badem (metabolizma hızlandırır).</li>";
+            dietHtml += "<li><strong>Öğle:</strong> Zeytinyağlı mevsim sebzesi yemeği (örneğin kereviz veya enginar), 1 kase ev yoğurdu. " + (isDiabetic ? "Ekmek yok." : "1 dilim siyez ekmeği.") + "</li>";
+            dietHtml += "<li><strong>Ara Öğün:</strong> 1 adet yeşil elma üzerine tarçın (kan şekerini dengeler).</li>";
+            dietHtml += "<li><strong>Akşam:</strong> Fırında ızgara balık veya köy tavuğu, bol limonlu mevsim salata (limon demir emilimini artırır).</li>";
+        } 
+        else if (bmiCategory === "Zayıf") {
+            dietHtml += "<li><strong>Kahvaltı:</strong> Ev yapımı şekersiz fıstık ezmesi, 2 dilim tam buğday ekmeği, 1 bardak ev yapımı kefir, omlet.</li>";
+            dietHtml += "<li><strong>Ara Öğün:</strong> 1 avuç ceviz ve 2 adet kuru incir (doğal enerji ve kilo alımı için).</li>";
+            dietHtml += "<li><strong>Öğle:</strong> Bol malzemeli kuru fasulye veya nohut, bulgur pilavı, cacık.</li>";
+            dietHtml += "<li><strong>Akşam:</strong> Kırmızı et (ızgara), fırınlanmış tatlı patates ve tereyağlı sebze sote.</li>";
+        }
+        else {
+            // Normal kilo - koruma diyeti
+            dietHtml += "<li><strong>Kahvaltı:</strong> Yulaf ezmesi, ev yoğurdu, 1 tatlı kaşığı doğal bal ve yaban mersini.</li>";
+            dietHtml += "<li><strong>Öğle:</strong> Izgara tavuklu kinoa salatası, 1 şişe doğal maden suyu.</li>";
+            dietHtml += "<li><strong>Akşam:</strong> Zeytinyağlı taze fasulye, karabuğday pilavı, 1 kase ev yoğurdu.</li>";
+        }
+
+        // D vitamin eksikliği varsa özel ekleme
+        if (vitD && vitD < 20) {
+            dietHtml += "<br><hr><li><em><strong>D Vitamini Destek Menüsü:</strong> Haftada en az 2 gün öğlen veya akşam menüsüne kültür mantarı sote ve somon/uskumru gibi yağlı balıklar ekleyin. Her gün 15-20 dk güneşlenmeyi unutmayın.</em></li>";
+        }
+
+        dietHtml += "</ul>";
+        dietHtml += "<p><em>Not: Bu liste girdiğiniz değerlere göre yazılım tarafından oluşturulmuş örnek bir doğal beslenme şablonudur. Kesin tedavi veya reçete yerine geçmez.</em></p>";
+
+        document.getElementById('dietPlan').innerHTML = dietHtml;
+        document.getElementById('results').style.display = 'block';
+        
+        // Ekranı sonuçlara kaydır
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
