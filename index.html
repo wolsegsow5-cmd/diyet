@@ -3,288 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI PRO Diyet & Yaşam Koçu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
+    <title>Talha Glass Studio | Sanatın Keskin Hali</title>
     <style>
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        :root {
+            --primary: #2c3e50;
+            --accent: #d4af37; /* Altın sarısı detaylar */
+            --light: #f4f4f4;
         }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
-            background: linear-gradient(-45deg, #f4b41a, #ff7e5f, #feb47b, #43e97b, #38f9d7);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #333;
+            background-color: var(--light);
+            color: var(--primary);
         }
-
+        header {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 3px solid var(--accent);
+        }
+        .hero {
+            padding: 50px 20px;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            color: white;
+        }
         .container {
-            max-width: 850px;
+            max-width: 1200px;
             margin: auto;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            position: relative;
+            padding: 20px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
             overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
         }
-
-        h1 { text-align: center; font-weight: 800; color: #ff5722; text-transform: uppercase; font-size: 2.2em; margin-bottom: 5px; }
-        .subtitle { text-align: center; font-size: 1.1em; color: #555; margin-bottom: 30px; font-weight: 600; }
-        h2 { color: #2e7d32; font-weight: 800; border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 1.3em;}
-        
-        .section {
-            background: rgba(255, 255, 255, 0.7);
-            margin-bottom: 25px; padding: 25px;
-            border-radius: 15px; border: 1px solid rgba(255,255,255,0.5);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        .card:hover { transform: translateY(-10px); }
+        .card img { width: 100%; height: 250px; object-fit: cover; }
+        .card-info { padding: 15px; }
+        .price { color: var(--accent); font-weight: bold; font-size: 1.2rem; }
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: var(--primary);
+            color: white;
+            margin-top: 50px;
         }
-
-        label { font-weight: 600; margin-top: 15px; display: block; color: #444; }
-        input[type="number"], input[type="file"], input[type="text"], select {
-            width: 100%; padding: 12px; margin-top: 8px;
-            border: 2px solid #ddd; border-radius: 8px;
-            font-family: 'Poppins', sans-serif; font-size: 15px;
-            box-sizing: border-box; transition: 0.3s;
+        .btn {
+            background: var(--accent);
+            color: white;
+            padding: 10px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
         }
-        input:focus, select:focus { border-color: #ff7e5f; outline: none; box-shadow: 0 0 8px rgba(255,126,95,0.3); }
-
-        .btn-main {
-            width: 100%; background: linear-gradient(45deg, #ff512f, #dd2476);
-            color: white; border: none; padding: 18px; font-size: 18px;
-            border-radius: 10px; cursor: pointer; font-weight: 800;
-            text-transform: uppercase; box-shadow: 0 5px 15px rgba(221, 36, 118, 0.4);
-            transition: all 0.3s ease;
-        }
-        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(221, 36, 118, 0.6); }
-
-        .alert-box {
-            background: #ffebee; color: #c62828; padding: 15px;
-            border-left: 5px solid #c62828; border-radius: 5px;
-            margin: 15px 0; font-weight: 600; display: none;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        /* Ödeme Modülü */
-        .premium-box {
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white; padding: 25px; border-radius: 15px;
-            margin-top: 30px; text-align: center; display: none;
-        }
-        .premium-box h3 { color: #ffd700; margin-top: 0; }
-        .price-tag { font-size: 30px; font-weight: 800; margin: 15px 0; }
-        .credit-card-form { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; text-align: left; }
-        .btn-pay { background: #ffd700; color: #000; padding: 15px; width: 100%; font-weight: 800; border: none; border-radius: 8px; margin-top: 15px; font-size: 18px; cursor: pointer; }
-        .btn-pay:hover { background: #ffea00; }
-
-        .locked-content {
-            filter: blur(6px); pointer-events: none; transition: 0.5s; user-select: none;
-        }
-        .unlocked { filter: blur(0); pointer-events: auto; }
-
-        .info-card {
-            background: #e3f2fd; border-left: 5px solid #1e88e5;
-            padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 15px;
-        }
-        .exercise-card {
-            background: #e8f5e9; border-left: 5px solid #43a047;
-            padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 15px;
-        }
-
-        .days-container { max-height: 400px; overflow-y: auto; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #ddd; }
-        .day-card { border-bottom: 2px dashed #eee; padding: 15px 0; }
-        .day-title { background: #ff5722; color: white; padding: 5px 12px; border-radius: 5px; font-weight: 600; display: inline-block; }
-        .coach-note { color: #e65100; font-weight: 600; font-size: 14px; margin-bottom: 10px; }
-
-        .floating-emoji { font-size: 40px; position: absolute; top: -15px; right: -15px; animation: float 3s infinite; }
     </style>
 </head>
 <body>
 
+<header>
+    <h1>TALHA GLASS STUDIO</h1>
+    <p>Atık Şişelerden Sofranıza Uzanan Sanat</p>
+</header>
+
+<section class="hero">
+    <h2>Geleceği Şekillendiriyoruz</h2>
+    <p>Her şişenin bir hikayesi vardır. Biz o hikayeyi bardağa dönüştürüyoruz.</p>
+</section>
+
 <div class="container">
-    <div class="floating-emoji">🏆💪</div>
-    <h1>AI PRO Yaşam Koçu</h1>
-    <p class="subtitle">Diyet, Spor ve Sağlıklı Alışkanlıklar Merkezi</p>
-
-    <div class="section">
-        <h2>🧍 1. Fiziksel Özellikler ve Hedef</h2>
-        <div style="display: flex; gap: 15px;">
-            <div style="flex:1;"><label>Boy (cm):</label><input type="number" id="height" placeholder="175"></div>
-            <div style="flex:1;"><label>Kilo (kg):</label><input type="number" id="weight" placeholder="70"></div>
-        </div>
-        <label>Hedef Kilo (kg):</label>
-        <input type="number" id="targetWeight" placeholder="Örn: 65 veya 80">
-        <div id="healthAlert" class="alert-box"></div>
-    </div>
-
-    <div class="section">
-        <h2>🚬 2. Yaşam Tarzı ve Alışkanlıklar</h2>
-        <div style="display: flex; gap: 15px;">
-            <div style="flex:1;">
-                <label>Sigara Kullanımı:</label>
-                <select id="smoking">
-                    <option value="hayir">Kullanmıyorum</option>
-                    <option value="evet">Düzenli Kullanıyorum</option>
-                </select>
-            </div>
-            <div style="flex:1;">
-                <label>Alkol Tüketimi:</label>
-                <select id="alcohol">
-                    <option value="hayir">Hiç İçmiyorum</option>
-                    <option value="haftalik">Haftada 1-2 Kadeh</option>
-                    <option value="sik">Sık Tüketiyorum</option>
-                </select>
+    <h2 style="text-align:center;">Öne Çıkan Modeller</h2>
+    <div class="gallery">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1516052321480-99883605c338?auto=format&fit=crop&w=500&q=60" alt="Amber Glass">
+            <div class="card-info">
+                <h3>Kehribar Viski Serisi</h3>
+                <p>Eski butik bira şişelerinden el işçiliği ile üretilmiştir.</p>
+                <p class="price">₺1.200 (4'lü Set)</p>
+                <a href="#" class="btn">İncele</a>
             </div>
         </div>
-    </div>
-
-    <div class="section">
-        <h2>🩸 3. Kan Değerleri (Opsiyonel)</h2>
-        <div style="display: flex; gap: 10px;">
-            <div style="flex:1;"><label>Tansiyon:</label><input type="number" id="bp" placeholder="12"></div>
-            <div style="flex:1;"><label>Kan Şekeri:</label><input type="number" id="sugar" placeholder="90"></div>
-        </div>
-    </div>
-
-    <button class="btn-main" onclick="startAIAnalysis()">Koçluk Programımı Oluştur</button>
-
-    <div id="premiumSection" class="premium-box">
-        <h3>🌟 AI PRO Premium Koçluk Merkezi</h3>
-        <p>Su ihtiyacınız, özel antrenmanınız ve 30 günlük diyetiniz hazırlandı!</p>
-        <div class="price-tag">İLK 30 GÜN ÜCRETSİZ!</div>
-        <p style="font-size: 14px; margin-bottom: 20px;">*30 gün sonunda aylık 1.000 TL.</p>
-        
-        <div class="credit-card-form">
-            <label>Kart Üzerindeki İsim</label><input type="text" placeholder="Ad Soyad">
-            <label>Kart Numarası</label><input type="text" placeholder="**** **** **** ****" maxlength="16">
-            <div style="display: flex; gap: 10px;">
-                <div style="flex:1;"><label>SKT</label><input type="text" placeholder="12/26"></div>
-                <div style="flex:1;"><label>CVV</label><input type="password" placeholder="***" maxlength="3"></div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1574945404508-b119280f5803?auto=format&fit=crop&w=500&q=60" alt="Green Glass">
+            <div class="card-info">
+                <h3>Rustik Yeşil Su Bardağı</h3>
+                <p>Şarap şişelerinin derin yeşili ile doğal bir görünüm.</p>
+                <p class="price">₺1.500 (6'lı Set)</p>
+                <a href="#" class="btn">İncele</a>
             </div>
-            <button class="btn-pay" onclick="unlockDietPlan()">💳 Ücretsiz Denemeyi Başlat & Kilidi Aç</button>
         </div>
-    </div>
-
-    <div id="results" style="display:none; margin-top: 30px;">
-        <h2>📊 Kişisel Rapor ve Antrenman</h2>
-        
-        <div class="locked-content" id="secretContent">
-            <div class="info-card" id="waterAndHabitInfo"></div>
-            
-            <div class="exercise-card" id="exerciseInfo"></div>
-            
-            <h3>🥗 30 Günlük Premium Menünüz</h3>
-            <div class="days-container" id="dietPlan"></div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1544145945-f904253db0ad?auto=format&fit=crop&w=500&q=60" alt="Clear Glass">
+            <div class="card-info">
+                <h3>Minimalist Shot Bardağı</h3>
+                <p>Şeffaf ve pürüzsüz kesim, modern mutfaklar için.</p>
+                <p class="price">₺650 (4'lü Set)</p>
+                <a href="#" class="btn">İncele</a>
+            </div>
         </div>
     </div>
 </div>
 
-<script>
-    function startAIAnalysis() {
-        let weight = parseFloat(document.getElementById('weight').value);
-        let targetWeight = parseFloat(document.getElementById('targetWeight').value);
-        let height = parseFloat(document.getElementById('height').value);
-
-        if (!height || !weight || !targetWeight) { alert("Boy, kilo ve hedef kilo zorunludur!"); return; }
-
-        const alertBox = document.getElementById('healthAlert');
-        alertBox.style.display = 'none';
-
-        // Sağlık Filtresi (Ayda Max 4 kg)
-        const maxChange = 4;
-        let weightDiff = targetWeight - weight;
-
-        if (weightDiff > maxChange) {
-            alertBox.innerHTML = `⚠️ DİKKAT: 30 günde ${weightDiff} kg almak iç organları yorar! Hedef sağlıklı sınır olan +${maxChange} kg'a çekildi.`;
-            alertBox.style.display = 'block'; targetWeight = weight + maxChange; document.getElementById('targetWeight').value = targetWeight;
-        } else if (weightDiff < -maxChange) {
-            alertBox.innerHTML = `⚠️ DİKKAT: 30 günde ${Math.abs(weightDiff)} kg vermek kas kaybına yol açar! Hedef sağlıklı sınır olan -${maxChange} kg'a çekildi.`;
-            alertBox.style.display = 'block'; targetWeight = weight - maxChange; document.getElementById('targetWeight').value = targetWeight;
-        }
-
-        generateReport(weight, targetWeight);
-
-        document.getElementById('results').style.display = 'block';
-        document.getElementById('premiumSection').style.display = 'block';
-        document.getElementById('premiumSection').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function generateReport(currentWeight, targetWeight) {
-        let isSmoking = document.getElementById('smoking').value;
-        let alcoholStatus = document.getElementById('alcohol').value;
-        let goalType = targetWeight > currentWeight ? "Kilo Alma" : "Kilo Verme";
-
-        // 1. Su Hesaplama (Kilo x 35ml)
-        let dailyWater = (currentWeight * 0.035).toFixed(1);
-        let waterHtml = `<strong>💧 Günlük Su İhtiyacınız:</strong> ${dailyWater} Litre.<br>`;
-        
-        if(isSmoking === 'evet') {
-            waterHtml += `🚬 <em>Sigara Uyarı:</em> Sigara C vitaminini hızla tüketir. Ara öğünlerinize ekstra Kivi ve Yeşil Çay eklendi.<br>`;
-        }
-        if(alcoholStatus !== 'hayir') {
-            waterHtml += `🍷 <em>Alkol Uyarı:</em> Alkol sıvı kaybı ve karaciğer yorgunluğu yapar. Alkol aldığınız gün su tüketimini 1 litre artırın. Akşam yemeklerinize enginar takviyesi önerilir.<br>`;
-        }
-        document.getElementById('waterAndHabitInfo').innerHTML = waterHtml;
-
-        // 2. Egzersiz Programı
-        let exerciseHtml = "<strong>🏃‍♂️ Size Özel Egzersiz Programı (Haftada 4 Gün):</strong><br>";
-        if(goalType === "Kilo Alma") {
-            exerciseHtml += "• <em>Isınma:</em> 10 dk hafif yürüyüş (kardiyoyu kısa tutun).<br>";
-            exerciseHtml += "• <em>Göğüs/Arka Kol:</em> Şınav (Maksimum tekrar x 3 Set), Dambıl Press.<br>";
-            exerciseHtml += "• <em>Sırt/Pazu:</em> Barfiks veya Dambıl Row (10 tekrar x 3 Set).<br>";
-            exerciseHtml += "• <em>Bacak:</em> Vücut ağırlığıyla Squat (Çömelme) (12 tekrar x 4 Set).<br>";
-            exerciseHtml += "<em>*Amaç kas liflerini yırtıp beslenmeyle büyütmektir.</em>";
-        } else {
-            exerciseHtml += "• <em>Kardiyo (Yağ Yakım):</em> 30-40 dk tempolu yürüyüş veya hafif koşu.<br>";
-            exerciseHtml += "• <em>HIIT:</em> İp atlama (50 tekrar x 4 Set).<br>";
-            exerciseHtml += "• <em>Core (Karın):</em> Plank (45 saniye x 3 Set), Mekik (15 tekrar x 3 Set).<br>";
-            exerciseHtml += "• <em>Bacak:</em> Lunge (Adımlama) (12 tekrar x 3 Set).<br>";
-        }
-        document.getElementById('exerciseInfo').innerHTML = exerciseHtml;
-
-        // 3. Diyet Menüsü
-        let dietHtml = "";
-        let morningRoutine = "☀️ <strong>Güne Başlarken:</strong> 1 büyük bardak ılık suya yarım limon sıkıp için (Metabolizmayı ateşler).";
-        
-        for (let day = 1; day <= 30; day++) {
-            dietHtml += `
-                <div class="day-card">
-                    <div class="day-title">Gün ${day}</div>
-                    <div class="coach-note">${morningRoutine}</div>
-                    <ul style="line-height: 1.8; color: #444;">
-                        <li><strong>Kahvaltı:</strong> ${goalType === 'Kilo Alma' ? '4 yumurtalı kaşarlı omlet, 100gr yulaf, fıstık ezmesi' : '2 haşlanmış yumurta, lor peyniri, bol maydanoz'}</li>
-                        <li><strong>Ara Öğün:</strong> ${goalType === 'Kilo Alma' ? 'Muz ve 1 avuç ceviz' : '1 fincan yeşil çay ve 10 çiğ badem'} ${isSmoking === 'evet' ? ' + 1 adet Kivi' : ''}</li>
-                        <li><strong>Öğle:</strong> ${goalType === 'Kilo Alma' ? '200gr tavuk, 150gr pirinç pilavı' : '150gr ızgara tavuk, bol yeşil salata'}</li>
-                        <li><strong>Akşam:</strong> ${goalType === 'Kilo Alma' ? 'Zeytinyağlı sebze, tam buğday makarna' : 'Fırın balık ve buharda brokoli'} ${alcoholStatus !== 'hayir' ? ' (Karaciğer için +Zeytinyağlı Enginar eklendi)' : ''}</li>
-                    </ul>
-                </div>
-            `;
-        }
-        document.getElementById('dietPlan').innerHTML = dietHtml;
-    }
-
-    // Ödeme Yapılınca Listeyi Aç
-    function unlockDietPlan() {
-        alert("🎉 İşlem Başarılı! 30 Günlük Ücretsiz Denemeniz başladı. Özel raporunuzun ve diyet listenizin kilidi açılıyor...");
-        
-        document.getElementById('premiumSection').style.display = 'none';
-        
-        const secretContent = document.getElementById('secretContent');
-        secretContent.classList.add('unlocked');
-        secretContent.classList.remove('locked-content');
-    }
-</script>
+<footer>
+    <p>&copy; 2026 Talha Glass Studio. Tüm Hakları Saklıdır.</p>
+    <p>Sürdürülebilir Tasarım | El İşçiliği | Geri Dönüşüm</p>
+</footer>
 
 </body>
 </html>
